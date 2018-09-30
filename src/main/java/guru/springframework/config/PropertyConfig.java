@@ -1,10 +1,12 @@
 package guru.springframework.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.env.Environment;
 
 import guru.springframework.examplebeans.FakeDataSource;
 
@@ -14,11 +16,14 @@ public class PropertyConfig {
 
     @Value("${guru.username}")
     String user;
+    
+    @Autowired
+    Environment env;
 
     @Value("${guru.password}")
     String password;
 
-    @Value("${guru.dburl}")
+    @Value("${guru.url}")
     String url;
 
     @Bean
@@ -26,7 +31,7 @@ public class PropertyConfig {
         FakeDataSource fakeDataSource = new FakeDataSource();
         fakeDataSource.setUser(user);
         fakeDataSource.setPassword(password);
-        fakeDataSource.setUrl(url);
+        fakeDataSource.setUrl(env.getProperty("GURU_Url"));
         return fakeDataSource;
     }
 
